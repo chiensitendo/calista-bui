@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Christmas Tree For Calista Bùi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="scene">
+        <div class="sparkles"></div>
+        <span class="top" id="top">✦
+            <i class="rays r1"></i>
+            <i class="rays r2"></i>
+        </span>
+
+        <div class="tree a3d" id="tree"></div>
+
+        <div class="greeting">
+            <div class="snow_text snow-back"></div>
+            <div class="snow_text snow-mid"></div>
+            <div class="snow_text snow-front"></div>
+
+            Merry Christmas <span class="love" id="name">Calista Bùi</span>
+        </div>
+    </div>
+    <div class="snow back"></div>
+    <div class="snow front"></div>
+    <script>
+        const queryString = window.location.search;
+
+        const urlParams = new URLSearchParams(queryString);
+
+        
+        
+        if (urlParams.has('name')) {
+            const nameElemt = document.getElementById("name");
+            const name = urlParams.get('name');
+            nameElemt.innerHTML = name || "Calista Bùi";
+        }
+
+        const tree = document.getElementById("tree");
+        const STAR_COUNT = 140;
+
+        tree.style.setProperty("--n-stars", STAR_COUNT);
+
+        for (let i = 0; i < STAR_COUNT; i++) {
+            const s = document.createElement("span");
+            s.className = "star";
+            s.style.setProperty("--i", i);
+            tree.appendChild(s);
+        }
+
+        const stars = document.querySelectorAll(".star");
+
+        stars.forEach(star => {
+            if (Math.random() < 0.12) {   // ~12% ornaments
+                star.classList.add("ornament");
+            }
+        });
+
+        const layer = document.querySelector(".sparkles");
+        const COUNT = 35;
+
+        function createSparkle() {
+            const s = document.createElement("span");
+
+            s.style.left = Math.random() * 100 + "%";
+            s.style.top = Math.random() * 100 + "%";
+
+            const size = 0.15 + Math.random() * 0.25;
+            s.style.width = size + "em";
+            s.style.height = size + "em";
+
+            s.style.animationDuration = 1.8 + Math.random() * 2.5 + "s";
+
+            layer.appendChild(s);
+
+            s.addEventListener("animationend", () => {
+                s.remove();
+                createSparkle();
+            });
+        }
+
+        for (let i = 0; i < COUNT; i++) {
+            createSparkle();
+        }
+        function makeSnow(layer, count) {
+            const el = document.querySelector(layer);
+            for (let i = 0; i < count; i++) {
+                const s = document.createElement("span");
+                s.style.setProperty("--x", Math.random());
+                s.style.setProperty("--d", Math.random());
+                el.appendChild(s);
+            }
+        }
+
+        makeSnow(".snow.back", 50);
+        makeSnow(".snow.front", 30);
+
+        function makeSnowText(layer, count, minDur, maxDur, drift) {
+            for (let i = 0; i < count; i++) {
+                const s = document.createElement("span");
+
+                s.style.left = Math.random() * 100 + "%";
+                s.style.animationDuration =
+                    minDur + Math.random() * (maxDur - minDur) + "s";
+                s.style.animationDelay = Math.random() * -maxDur + "s";
+                s.style.setProperty(
+                    "--drift",
+                    (Math.random() * drift - drift / 2) + "px"
+                );
+
+                layer.appendChild(s);
+            }
+        }
+
+        makeSnowText(document.querySelector(".snow-back"), 18, 14, 22, 20);
+        makeSnowText(document.querySelector(".snow-mid"), 14, 9, 15, 30);
+        makeSnowText(document.querySelector(".snow-front"), 10, 5, 9, 40);
+    </script>
+</body>
+
+
+</html>

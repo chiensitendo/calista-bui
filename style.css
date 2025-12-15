@@ -1,0 +1,474 @@
+body {
+    display: grid;
+    place-content: center;
+    margin: 0;
+    height: 100vh;
+   background:
+        radial-gradient(circle at bottom, #0a2a1a, #000014 60%);
+    overflow: hidden;
+    perspective: 35em;
+}
+
+
+
+
+div, span {
+    transform-style: preserve-3d;
+}
+
+/* 🎬 Scene wrapper */
+.scene {
+    position: relative;
+    width: 20em;
+    height: 26em;
+}
+
+/* 🌲 Tree (rotating) */
+.tree {
+    position: absolute;
+    inset: 0;
+}
+
+/* 🔄 Rotation */
+.a3d {
+    animation: roty 12s linear infinite reverse;
+}
+
+/* ✨ Stars */
+.star {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    width: 0.35em;
+    height: 0.35em;
+    /* background: white; */
+    border-radius: 50%;
+    /* box-shadow:
+        0 0 0.35em #fff,
+        0 0 0.9em #fff; */
+
+    background: #f7fff9;
+
+    box-shadow:
+        0 0 0.3em rgba(180, 255, 200, 0.9),
+        0 0 0.8em rgba(80, 220, 140, 0.8),
+        0 0 1.6em rgba(20, 140, 80, 0.6);
+
+    --p: calc(var(--i) / var(--n-stars));
+    --y-final: calc(var(--p) * -20em);
+    --r-final: calc((1 - var(--p)) * 8em);
+    --a: calc(var(--i) * 23deg);
+
+    animation:
+        build 2.5s ease-out forwards,
+        twinkle 2s infinite ease-in-out alternate;
+
+    animation-delay:
+        calc(var(--i) * 0.015s),
+        calc(var(--i) * 0.03s);
+}
+
+.star.ornament {
+    width: 0.5em;
+    height: 0.5em;
+    background: radial-gradient(circle at 30% 30%, #ffcccc, #c4161c);
+
+    box-shadow:
+        0 0 0.4em #ff4d4d,
+        0 0 1.2em rgba(255, 60, 60, 0.9);
+}
+
+@keyframes ornamentGlow {
+    from { filter: brightness(0.9); }
+    to   { filter: brightness(1.4); }
+}
+
+.sparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.sparkles span {
+    position: absolute;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        #fff6c9 0%,
+        #ffd45a 40%,
+        transparent 70%
+    );
+
+    filter: blur(0.6px);
+
+    animation: sparkleLife ease-out forwards;
+}
+
+@keyframes sparkleLife {
+    0% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+    30% {
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+
+@keyframes sparkleFade {
+    from { opacity: 0.15; }
+    to   { opacity: 0.7; }
+}
+
+@keyframes sparkleDrift {
+    from {
+        transform:
+            translate(0, 0)
+            scale(var(--s));
+    }
+    to {
+        transform:
+            translate(
+                calc(var(--dx) * 1.5em),
+                calc(var(--dy) * 1.5em)
+            )
+            scale(var(--s));
+    }
+}
+
+
+
+/* ✨ Light rays */
+.top .rays {
+    position: absolute;
+    inset: -1.2em;
+    border-radius: 50%;
+    pointer-events: none;
+
+    background:
+        repeating-conic-gradient(
+            from 0deg,
+            rgba(255, 210, 90, 0.35) 0deg 4deg,
+            transparent 4deg 20deg
+        );
+
+    filter: blur(1.6px);
+    opacity: 0.25;
+
+    mask: radial-gradient(circle, #000 35%, transparent 75%);
+    -webkit-mask: radial-gradient(circle, #000 35%, transparent 75%);
+}
+
+/* layer variation */
+.r1 {
+    animation: raysSlow 14s linear infinite;
+    transform: scale(1.05);
+}
+
+.r2 {
+    animation: raysFast 9s linear infinite reverse;
+    transform: scale(0.9);
+    opacity: 0.18;
+}
+
+/* 🎥 Motion */
+@keyframes raysSlow {
+    to { transform: rotate(1turn) scale(1.05); }
+}
+
+@keyframes raysFast {
+    to { transform: rotate(1turn) scale(0.9); }
+}
+
+
+/* ⭐ TOP STAR (fixed) */
+.top {
+    position: absolute;
+    top: -36%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.6em;
+    z-index: 10;
+    pointer-events: none;
+
+    color: #ffd86b; /* Christmas gold */
+
+    text-shadow:
+        0 0 0.4em #ffd86b,
+        0 0 1em #ffb700,
+        0 0 2.5em rgba(255, 183, 0, 0.9);
+
+    opacity: 0;
+    animation:
+        appear 1s ease forwards,
+        spin 10s linear infinite;
+
+    animation-delay:
+        2.4s,
+        3.4s;
+}
+
+
+
+/* 🔺 Build */
+@keyframes build {
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotateY(var(--a))
+            translateZ(10em);
+        opacity: 0;
+    }
+    to {
+        transform:
+            translate(-50%, -50%)
+            translateY(var(--y-final))
+            rotateY(var(--a))
+            translateZ(var(--r-final));
+        opacity: 1;
+    }
+}
+
+/* ✨ Sparkle */
+@keyframes twinkle {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+}
+
+/* ⭐ Appear */
+@keyframes appear {
+    to { opacity: 1; }
+}
+
+/* 🔄 Rotate tree only */
+@keyframes roty {
+    to { transform: rotateY(1turn); }
+}
+
+@keyframes pulse {
+  from { transform: translateX(-50%) rotate(var(--r,0deg)) scale(1); }
+  to   { transform: translateX(-50%) rotate(var(--r,0deg)) scale(1.08); }
+}
+
+@keyframes spin {
+  to {
+    transform: translateX(-50%) rotateY(1turn);
+  }
+}
+
+@keyframes rays {
+    to {
+        transform: rotate(-1turn);
+    }
+}
+
+.snow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.snow span {
+    position: absolute;
+    top: -5%;
+    left: calc(var(--x) * 100%);
+    width: 0.35em;
+    height: 0.35em;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+
+    animation: snow 10s linear infinite;
+    animation-delay: calc(var(--d) * -10s);
+}
+
+.snow.back span {
+    opacity: 0.3;
+    transform: scale(0.6);
+}
+
+.snow.front span {
+    opacity: 0.8;
+    transform: scale(1);
+}
+
+@keyframes snow {
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+
+.greeting {
+    margin-top: 2.5em;
+    text-align: center;
+    position: absolute;
+    bottom: 2em;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-size: 1.8em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+
+    color: #eaffea;
+
+    opacity: 0;
+    transform: translateY(1em);
+
+    animation: greetingIn 1.6s ease-out forwards;
+    animation-delay: 2.8s;
+}
+
+/* ❤️ Highlighted part */
+.greeting span {
+    display: inline-block;
+    margin-left: 0.25em;
+
+    background: linear-gradient(
+        120deg,
+        #ff4d4d,
+        #ffcc66,
+        #ffffff
+    );
+    background-size: 200% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation:
+        shimmer 3s linear infinite,
+        pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* ✨ Entry motion */
+@keyframes greetingIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🌟 Soft gradient movement */
+@keyframes shimmer {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* ❤️ Subtle heartbeat glow */
+@keyframes pulseGlow {
+    0%, 100% {
+        text-shadow:
+            0 0 0.4em rgba(255, 120, 120, 0.6),
+            0 0 1.2em rgba(255, 200, 120, 0.4);
+    }
+    50% {
+        text-shadow:
+            0 0 0.8em rgba(255, 120, 120, 0.9),
+            0 0 2em rgba(255, 200, 120, 0.8);
+    }
+}
+
+/* shared */
+.snow_text {
+    position: absolute;
+    inset: -2em;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.snow_text span {
+    position: absolute;
+    top: -10%;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.8;
+
+    animation-name: snowFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* ❄ BACK (small, slow, blurry) */
+.snow-back span {
+    width: 0.15em;
+    height: 0.15em;
+    opacity: 0.25;
+    filter: blur(1.2px);
+}
+
+/* ❄ MID */
+.snow-mid span {
+    width: 0.25em;
+    height: 0.25em;
+    opacity: 0.45;
+    filter: blur(0.6px);
+}
+
+/* ❄ FRONT (larger, faster) */
+.snow-front span {
+    width: 0.35em;
+    height: 0.35em;
+    opacity: 0.75;
+    filter: blur(0.2px);
+}
+
+@keyframes snowFall {
+    0% {
+        transform: translate(0, -10%);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--drift), 140%);
+        opacity: 0;
+    }
+}
+
+.love {
+    position: relative;
+}
+
+/* ❤️ hearts */
+.love::before,
+.love::after {
+    content: "❤";
+    position: absolute;
+    font-size: 0.6em;
+    color: #ff6b6b;
+    opacity: 0;
+    animation: heartFloat 4s ease-in-out infinite;
+}
+
+.love::before {
+    left: -1.2em;
+    animation-delay: 0s;
+}
+
+.love::after {
+    right: -1.2em;
+    animation-delay: 2s;
+}
+
+@keyframes heartFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6);
+    }
+    20% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-1.6em) scale(1.1);
+    }
+}
