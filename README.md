@@ -1,2 +1,2 @@
-# calista-bui
-Repo for my wife
+# callista-bui
+Repo for Callista Bui
